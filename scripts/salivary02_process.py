@@ -16,6 +16,8 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 RESOURCE_DIR = PROJECT_DIR / "resources/"
 
 # %% IMPORTS
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -354,4 +356,3 @@ def plot_ct_composition(
 plot_ct_composition(
     adata, sample_col="donor_id", cell_col="cell_type_union", disease_col="disease"
 )
-
