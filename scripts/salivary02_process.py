@@ -16,14 +16,16 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 RESOURCE_DIR = PROJECT_DIR / "resources/"
 
 # %% IMPORTS
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import scanpy as sc
 import scipy.sparse as sp
 import scvi
 import torch
 
 # %%
-adata = sc.read_h5ad(f"{DATA_DIR}/cxg_sjogrens.h5ad")
+adata = sc.read_h5ad(f"{DATA_DIR}/salivary-cxg.h5ad")
 # %%
 # PREPARE DATA
 # Modify and reformat any oddly formatted columns
@@ -60,13 +62,13 @@ adata.obs["development_stage"] = [ds[:2] for ds in adata.obs["development_stage"
 set(adata.obs["development_stage"])
 # %%
 
-adata.write_h5ad(f"{DATA_DIR}/cxg_sjogrens_prepared.h5ad")
+adata.write_h5ad(f"{DATA_DIR}/salivary-prepared.h5ad")
 
 # %%
 # PROCESS DATA
 # Loads prepared data for raw count processing using scVI
 # Performs QC and defines 'custom_attrs'
-adata = sc.read_h5ad(f"{DATA_DIR}/cxg_sjogrens_prepared.h5ad")
+adata = sc.read_h5ad(f"{DATA_DIR}/salivary-prepared.h5ad")
 
 # %%
 # QUALITY CONTROL
@@ -183,15 +185,20 @@ sc.tl.leiden(adata, resolution=0.5)
 
 # %%
 # Plots
-# adata = sc.read_h5ad(f"{OUTPUT_DIR}/cxg_sjogrens_scVI.h5ad")
+# adata = sc.read_h5ad(f"{OUTPUT_DIR}/salivary-scVI.h5ad")
 sc.pl.umap(adata, color=["leiden"], legend_loc="on data")
 sc.pl.umap(adata, color=["cell_type"])
 sc.pl.umap(adata, color=["donor_id"])
 sc.pl.umap(adata, color=["disease"])
 
 # %%
+# Save Results
+adata.write_h5ad(f"{DATA_DIR}/salivary-scvi.h5ad")
+model.save(f"{DATA_DIR}/scvi_model/", overwrite=True)
+
+# %%
 # Figures
-# adata = sc.read_h5ad(f"{OUTPUT_DIR}/cxg_sjogrens_scVI.h5ad")
+# adata = sc.read_h5ad(f"{OUTPUT_DIR}/salivary-scVI.h5ad")
 
 # complement list (from resources if present)
 comp_path = os.path.join(RESOURCE_DIR, "resources", "complement-genes.txt")
@@ -217,3 +224,134 @@ else:
     ]
 
 print("Complement genes:", comp_genes)
+
+filt_comp_genes = [
+    "C1QA",
+    "C1QB",
+    "C1QC",
+    "C2",
+    "C3",
+    "C3AR1",
+    "C5",
+    "C5AR1",
+    "C5AR2",
+    "C1R",
+    "C1S",
+    "CD46",
+    "CD55",
+    "CD59",
+    "CFB",
+    "CFD",
+    "CFH",
+    "CFI",
+    "CFP",
+    "CLU",
+    "ITGAM",
+    "ITGAX",
+    "PROS1",
+    "SERPING1",
+    "THBD",
+    "VSIG4",
+]
+
+sc.pl.dotplot(
+    adata,
+    var_names=comp_genes,
+    gene_symbols="feature_name",
+    groupby="cell_type_union",
+    use_raw=False,
+    log=False,
+    mean_only_expressed=True,
+    standard_scale="var",
+    show=True,
+)
+
+sc.pl.dotplot(
+    adata,
+    var_names=filt_comp_genes,
+    gene_symbols="feature_name",
+    groupby="cell_type_union",
+    use_raw=False,
+    log=False,
+    mean_only_expressed=True,
+    standard_scale="var",
+    show=True,
+)
+
+sc.pl.dotplot(
+    adata,
+    var_names=filt_comp_genes,
+    gene_symbols="feature_name",
+    groupby="cell_type_union",
+    use_raw=False,
+    log=False,
+    mean_only_expressed=True,
+    standard_scale="var",
+    show=True,
+    dendrogram=True,
+)
+
+sc.pl.umap(adata, color="cell_type_union", show=True, title=" ")
+
+sc.pl.umap(
+    adata,
+    color=["C1QA", "C3", "CFH", "C5AR1", "C5", "C3AR1", "C1R", "CD59"],
+    gene_symbols="feature_name",
+    use_raw=False,
+    show=True,
+    color_map="magma",
+)
+
+sc.pl.umap(
+    adata,
+    color="C1QA",
+    gene_symbols="feature_name",
+    use_raw=False,
+    show=True,
+    color_map="magma",
+)
+
+
+def plot_ct_composition(
+    adata, sample_col="Sample", cell_col="cell_type", disease_col="disease"
+):
+    if cell_col not in adata.obs.columns or sample_col not in adata.obs.columns:
+        raise RuntimeError("Missing sample or cell-type column")
+
+    ctab = pd.crosstab(
+        adata.obs[sample_col], adata.obs[cell_col], normalize="index"
+    ).fillna(0)
+
+    if disease_col in adata.obs.columns:
+        samp2dis = adata.obs.groupby(sample_col)[disease_col].agg(
+            lambda x: x.mode().iloc[0] if not x.mode().empty else x.iloc[0]
+        )
+        common = ctab.index.intersection(samp2dis.index)
+        ctab = ctab.loc[common]
+        samp2dis = samp2dis.loc[common]
+        ctab = ctab.loc[samp2dis.sort_values().index]
+
+    ax = ctab.plot(
+        kind="bar",
+        stacked=True,
+        colormap="tab20",
+        figsize=(14, 5),
+        width=0.8,
+        legend=False,
+    )
+    ax.set(xlabel="Sample", ylabel="Fraction", title="Cell-type composition per sample")
+    plt.legend(bbox_to_anchor=(1, 1), title="cell type")
+    plt.tight_layout()
+
+    if disease_col in adata.obs.columns:
+        agg = ctab.groupby(samp2dis).mean()
+        agg.plot(kind="bar", stacked=True, colormap="tab20", figsize=(6, 4), width=0.8)
+        plt.ylabel("Fraction")
+        plt.title("Mean cell-type composition by disease")
+        plt.tight_layout()
+
+
+plot_ct_composition(
+    adata, sample_col="donor_id", cell_col="cell_type_union", disease_col="disease"
+)
+

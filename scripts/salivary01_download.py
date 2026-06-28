@@ -22,8 +22,10 @@ census["census_info"]["summary"].read().concat().to_pandas()
 datasets = census["census_info"]["datasets"].read().concat().to_pandas()
 
 # Fetch an AnnData object
-dataset_id = "df1edb87-e512-43ae-b5f4-cb179cfc2bb4" # https://datasets.cellxgene.cziscience.com/31380664-ba9c-49d1-9961-b2bf4f7131a2.h5ad
-cellxgene_census.download_source_h5ad(dataset_id, to_path=f"{DATA_DIR}/cxg_sjogrens.h5ad", progress_bar=True)
+dataset_id = "df1edb87-e512-43ae-b5f4-cb179cfc2bb4"  # https://datasets.cellxgene.cziscience.com/31380664-ba9c-49d1-9961-b2bf4f7131a2.h5ad
+cellxgene_census.download_source_h5ad(
+    dataset_id, to_path=f"{DATA_DIR}/salivary-cxg.h5ad", progress_bar=True
+)
 census.close()
 
 # %%
