@@ -1,0 +1,14 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+scripts/cache/
+
+# File types
+*.pkl
+
+# Large folders
+data/
+scripts/cache/
+
+# Large files - can be regenerated
+outputs/pbmc/liana_by_sample.csv

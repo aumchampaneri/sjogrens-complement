@@ -1,0 +1,203 @@
+,cell_batch,celltypist_label,SampleName
+0,HC-1,CD16+ NK cells,cell_batch.HC-1-celltypist_label.CD16+ NK cells
+1,HC-1,Classical monocytes,cell_batch.HC-1-celltypist_label.Classical monocytes
+2,HC-1,DC1,cell_batch.HC-1-celltypist_label.DC1
+3,HC-1,DC2,cell_batch.HC-1-celltypist_label.DC2
+4,HC-1,Late erythroid,cell_batch.HC-1-celltypist_label.Late erythroid
+5,HC-1,MAIT cells,cell_batch.HC-1-celltypist_label.MAIT cells
+6,HC-1,Mast cells,cell_batch.HC-1-celltypist_label.Mast cells
+7,HC-1,Megakaryocyte precursor,cell_batch.HC-1-celltypist_label.Megakaryocyte precursor
+8,HC-1,Megakaryocytes/platelets,cell_batch.HC-1-celltypist_label.Megakaryocytes/platelets
+9,HC-1,Memory B cells,cell_batch.HC-1-celltypist_label.Memory B cells
+10,HC-1,NK cells,cell_batch.HC-1-celltypist_label.NK cells
+11,HC-1,Naive B cells,cell_batch.HC-1-celltypist_label.Naive B cells
+12,HC-1,Non-classical monocytes,cell_batch.HC-1-celltypist_label.Non-classical monocytes
+13,HC-1,Plasma cells,cell_batch.HC-1-celltypist_label.Plasma cells
+14,HC-1,Regulatory T cells,cell_batch.HC-1-celltypist_label.Regulatory T cells
+15,HC-1,Tcm/Naive cytotoxic T cells,cell_batch.HC-1-celltypist_label.Tcm/Naive cytotoxic T cells
+16,HC-1,Tcm/Naive helper T cells,cell_batch.HC-1-celltypist_label.Tcm/Naive helper T cells
+17,HC-1,Tem/Effector helper T cells,cell_batch.HC-1-celltypist_label.Tem/Effector helper T cells
+18,HC-1,Tem/Temra cytotoxic T cells,cell_batch.HC-1-celltypist_label.Tem/Temra cytotoxic T cells
+19,HC-1,Tem/Trm cytotoxic T cells,cell_batch.HC-1-celltypist_label.Tem/Trm cytotoxic T cells
+20,HC-1,pDC,cell_batch.HC-1-celltypist_label.pDC
+21,HC-2,CD16+ NK cells,cell_batch.HC-2-celltypist_label.CD16+ NK cells
+22,HC-2,Classical monocytes,cell_batch.HC-2-celltypist_label.Classical monocytes
+23,HC-2,DC2,cell_batch.HC-2-celltypist_label.DC2
+24,HC-2,Late erythroid,cell_batch.HC-2-celltypist_label.Late erythroid
+25,HC-2,MAIT cells,cell_batch.HC-2-celltypist_label.MAIT cells
+26,HC-2,Mast cells,cell_batch.HC-2-celltypist_label.Mast cells
+27,HC-2,Megakaryocyte precursor,cell_batch.HC-2-celltypist_label.Megakaryocyte precursor
+28,HC-2,Megakaryocytes/platelets,cell_batch.HC-2-celltypist_label.Megakaryocytes/platelets
+29,HC-2,Memory B cells,cell_batch.HC-2-celltypist_label.Memory B cells
+30,HC-2,NK cells,cell_batch.HC-2-celltypist_label.NK cells
+31,HC-2,Naive B cells,cell_batch.HC-2-celltypist_label.Naive B cells
+32,HC-2,Non-classical monocytes,cell_batch.HC-2-celltypist_label.Non-classical monocytes
+33,HC-2,Plasma cells,cell_batch.HC-2-celltypist_label.Plasma cells
+34,HC-2,Regulatory T cells,cell_batch.HC-2-celltypist_label.Regulatory T cells
+35,HC-2,Tcm/Naive cytotoxic T cells,cell_batch.HC-2-celltypist_label.Tcm/Naive cytotoxic T cells
+36,HC-2,Tcm/Naive helper T cells,cell_batch.HC-2-celltypist_label.Tcm/Naive helper T cells
+37,HC-2,Tem/Effector helper T cells,cell_batch.HC-2-celltypist_label.Tem/Effector helper T cells
+38,HC-2,Tem/Temra cytotoxic T cells,cell_batch.HC-2-celltypist_label.Tem/Temra cytotoxic T cells
+39,HC-2,Tem/Trm cytotoxic T cells,cell_batch.HC-2-celltypist_label.Tem/Trm cytotoxic T cells
+40,HC-2,pDC,cell_batch.HC-2-celltypist_label.pDC
+41,HC-3,CD16+ NK cells,cell_batch.HC-3-celltypist_label.CD16+ NK cells
+42,HC-3,Classical monocytes,cell_batch.HC-3-celltypist_label.Classical monocytes
+43,HC-3,DC1,cell_batch.HC-3-celltypist_label.DC1
+44,HC-3,DC2,cell_batch.HC-3-celltypist_label.DC2
+45,HC-3,Late erythroid,cell_batch.HC-3-celltypist_label.Late erythroid
+46,HC-3,MAIT cells,cell_batch.HC-3-celltypist_label.MAIT cells
+47,HC-3,Mast cells,cell_batch.HC-3-celltypist_label.Mast cells
+48,HC-3,Megakaryocyte precursor,cell_batch.HC-3-celltypist_label.Megakaryocyte precursor
+49,HC-3,Megakaryocytes/platelets,cell_batch.HC-3-celltypist_label.Megakaryocytes/platelets
+50,HC-3,Memory B cells,cell_batch.HC-3-celltypist_label.Memory B cells
+51,HC-3,NK cells,cell_batch.HC-3-celltypist_label.NK cells
+52,HC-3,Naive B cells,cell_batch.HC-3-celltypist_label.Naive B cells
+53,HC-3,Non-classical monocytes,cell_batch.HC-3-celltypist_label.Non-classical monocytes
+54,HC-3,Plasma cells,cell_batch.HC-3-celltypist_label.Plasma cells
+55,HC-3,Regulatory T cells,cell_batch.HC-3-celltypist_label.Regulatory T cells
+56,HC-3,Tcm/Naive cytotoxic T cells,cell_batch.HC-3-celltypist_label.Tcm/Naive cytotoxic T cells
+57,HC-3,Tcm/Naive helper T cells,cell_batch.HC-3-celltypist_label.Tcm/Naive helper T cells
+58,HC-3,Tem/Effector helper T cells,cell_batch.HC-3-celltypist_label.Tem/Effector helper T cells
+59,HC-3,Tem/Temra cytotoxic T cells,cell_batch.HC-3-celltypist_label.Tem/Temra cytotoxic T cells
+60,HC-3,Tem/Trm cytotoxic T cells,cell_batch.HC-3-celltypist_label.Tem/Trm cytotoxic T cells
+61,HC-3,pDC,cell_batch.HC-3-celltypist_label.pDC
+62,HC-4,CD16+ NK cells,cell_batch.HC-4-celltypist_label.CD16+ NK cells
+63,HC-4,Classical monocytes,cell_batch.HC-4-celltypist_label.Classical monocytes
+64,HC-4,DC2,cell_batch.HC-4-celltypist_label.DC2
+65,HC-4,Late erythroid,cell_batch.HC-4-celltypist_label.Late erythroid
+66,HC-4,MAIT cells,cell_batch.HC-4-celltypist_label.MAIT cells
+67,HC-4,Mast cells,cell_batch.HC-4-celltypist_label.Mast cells
+68,HC-4,Megakaryocyte precursor,cell_batch.HC-4-celltypist_label.Megakaryocyte precursor
+69,HC-4,Megakaryocytes/platelets,cell_batch.HC-4-celltypist_label.Megakaryocytes/platelets
+70,HC-4,Memory B cells,cell_batch.HC-4-celltypist_label.Memory B cells
+71,HC-4,NK cells,cell_batch.HC-4-celltypist_label.NK cells
+72,HC-4,Naive B cells,cell_batch.HC-4-celltypist_label.Naive B cells
+73,HC-4,Non-classical monocytes,cell_batch.HC-4-celltypist_label.Non-classical monocytes
+74,HC-4,Plasma cells,cell_batch.HC-4-celltypist_label.Plasma cells
+75,HC-4,Regulatory T cells,cell_batch.HC-4-celltypist_label.Regulatory T cells
+76,HC-4,Tcm/Naive cytotoxic T cells,cell_batch.HC-4-celltypist_label.Tcm/Naive cytotoxic T cells
+77,HC-4,Tcm/Naive helper T cells,cell_batch.HC-4-celltypist_label.Tcm/Naive helper T cells
+78,HC-4,Tem/Effector helper T cells,cell_batch.HC-4-celltypist_label.Tem/Effector helper T cells
+79,HC-4,Tem/Temra cytotoxic T cells,cell_batch.HC-4-celltypist_label.Tem/Temra cytotoxic T cells
+80,HC-4,Tem/Trm cytotoxic T cells,cell_batch.HC-4-celltypist_label.Tem/Trm cytotoxic T cells
+81,HC-4,pDC,cell_batch.HC-4-celltypist_label.pDC
+82,HC-5,CD16+ NK cells,cell_batch.HC-5-celltypist_label.CD16+ NK cells
+83,HC-5,Classical monocytes,cell_batch.HC-5-celltypist_label.Classical monocytes
+84,HC-5,DC2,cell_batch.HC-5-celltypist_label.DC2
+85,HC-5,Late erythroid,cell_batch.HC-5-celltypist_label.Late erythroid
+86,HC-5,MAIT cells,cell_batch.HC-5-celltypist_label.MAIT cells
+87,HC-5,Mast cells,cell_batch.HC-5-celltypist_label.Mast cells
+88,HC-5,Megakaryocyte precursor,cell_batch.HC-5-celltypist_label.Megakaryocyte precursor
+89,HC-5,Megakaryocytes/platelets,cell_batch.HC-5-celltypist_label.Megakaryocytes/platelets
+90,HC-5,Memory B cells,cell_batch.HC-5-celltypist_label.Memory B cells
+91,HC-5,NK cells,cell_batch.HC-5-celltypist_label.NK cells
+92,HC-5,Naive B cells,cell_batch.HC-5-celltypist_label.Naive B cells
+93,HC-5,Non-classical monocytes,cell_batch.HC-5-celltypist_label.Non-classical monocytes
+94,HC-5,Plasma cells,cell_batch.HC-5-celltypist_label.Plasma cells
+95,HC-5,Regulatory T cells,cell_batch.HC-5-celltypist_label.Regulatory T cells
+96,HC-5,Tcm/Naive cytotoxic T cells,cell_batch.HC-5-celltypist_label.Tcm/Naive cytotoxic T cells
+97,HC-5,Tcm/Naive helper T cells,cell_batch.HC-5-celltypist_label.Tcm/Naive helper T cells
+98,HC-5,Tem/Effector helper T cells,cell_batch.HC-5-celltypist_label.Tem/Effector helper T cells
+99,HC-5,Tem/Temra cytotoxic T cells,cell_batch.HC-5-celltypist_label.Tem/Temra cytotoxic T cells
+100,HC-5,Tem/Trm cytotoxic T cells,cell_batch.HC-5-celltypist_label.Tem/Trm cytotoxic T cells
+101,HC-5,pDC,cell_batch.HC-5-celltypist_label.pDC
+102,pSS-1,CD16+ NK cells,cell_batch.pSS-1-celltypist_label.CD16+ NK cells
+103,pSS-1,Classical monocytes,cell_batch.pSS-1-celltypist_label.Classical monocytes
+104,pSS-1,DC1,cell_batch.pSS-1-celltypist_label.DC1
+105,pSS-1,DC2,cell_batch.pSS-1-celltypist_label.DC2
+106,pSS-1,Late erythroid,cell_batch.pSS-1-celltypist_label.Late erythroid
+107,pSS-1,MAIT cells,cell_batch.pSS-1-celltypist_label.MAIT cells
+108,pSS-1,Mast cells,cell_batch.pSS-1-celltypist_label.Mast cells
+109,pSS-1,Megakaryocyte precursor,cell_batch.pSS-1-celltypist_label.Megakaryocyte precursor
+110,pSS-1,Megakaryocytes/platelets,cell_batch.pSS-1-celltypist_label.Megakaryocytes/platelets
+111,pSS-1,Memory B cells,cell_batch.pSS-1-celltypist_label.Memory B cells
+112,pSS-1,Naive B cells,cell_batch.pSS-1-celltypist_label.Naive B cells
+113,pSS-1,Non-classical monocytes,cell_batch.pSS-1-celltypist_label.Non-classical monocytes
+114,pSS-1,Plasma cells,cell_batch.pSS-1-celltypist_label.Plasma cells
+115,pSS-1,Regulatory T cells,cell_batch.pSS-1-celltypist_label.Regulatory T cells
+116,pSS-1,Tcm/Naive cytotoxic T cells,cell_batch.pSS-1-celltypist_label.Tcm/Naive cytotoxic T cells
+117,pSS-1,Tcm/Naive helper T cells,cell_batch.pSS-1-celltypist_label.Tcm/Naive helper T cells
+118,pSS-1,Tem/Effector helper T cells,cell_batch.pSS-1-celltypist_label.Tem/Effector helper T cells
+119,pSS-1,Tem/Temra cytotoxic T cells,cell_batch.pSS-1-celltypist_label.Tem/Temra cytotoxic T cells
+120,pSS-1,Tem/Trm cytotoxic T cells,cell_batch.pSS-1-celltypist_label.Tem/Trm cytotoxic T cells
+121,pSS-1,pDC,cell_batch.pSS-1-celltypist_label.pDC
+122,pSS-2,CD16+ NK cells,cell_batch.pSS-2-celltypist_label.CD16+ NK cells
+123,pSS-2,Classical monocytes,cell_batch.pSS-2-celltypist_label.Classical monocytes
+124,pSS-2,DC2,cell_batch.pSS-2-celltypist_label.DC2
+125,pSS-2,Late erythroid,cell_batch.pSS-2-celltypist_label.Late erythroid
+126,pSS-2,MAIT cells,cell_batch.pSS-2-celltypist_label.MAIT cells
+127,pSS-2,Mast cells,cell_batch.pSS-2-celltypist_label.Mast cells
+128,pSS-2,Megakaryocyte precursor,cell_batch.pSS-2-celltypist_label.Megakaryocyte precursor
+129,pSS-2,Megakaryocytes/platelets,cell_batch.pSS-2-celltypist_label.Megakaryocytes/platelets
+130,pSS-2,Memory B cells,cell_batch.pSS-2-celltypist_label.Memory B cells
+131,pSS-2,NK cells,cell_batch.pSS-2-celltypist_label.NK cells
+132,pSS-2,Naive B cells,cell_batch.pSS-2-celltypist_label.Naive B cells
+133,pSS-2,Non-classical monocytes,cell_batch.pSS-2-celltypist_label.Non-classical monocytes
+134,pSS-2,Plasma cells,cell_batch.pSS-2-celltypist_label.Plasma cells
+135,pSS-2,Regulatory T cells,cell_batch.pSS-2-celltypist_label.Regulatory T cells
+136,pSS-2,Tcm/Naive cytotoxic T cells,cell_batch.pSS-2-celltypist_label.Tcm/Naive cytotoxic T cells
+137,pSS-2,Tcm/Naive helper T cells,cell_batch.pSS-2-celltypist_label.Tcm/Naive helper T cells
+138,pSS-2,Tem/Effector helper T cells,cell_batch.pSS-2-celltypist_label.Tem/Effector helper T cells
+139,pSS-2,Tem/Temra cytotoxic T cells,cell_batch.pSS-2-celltypist_label.Tem/Temra cytotoxic T cells
+140,pSS-2,Tem/Trm cytotoxic T cells,cell_batch.pSS-2-celltypist_label.Tem/Trm cytotoxic T cells
+141,pSS-2,pDC,cell_batch.pSS-2-celltypist_label.pDC
+142,pSS-3,CD16+ NK cells,cell_batch.pSS-3-celltypist_label.CD16+ NK cells
+143,pSS-3,Classical monocytes,cell_batch.pSS-3-celltypist_label.Classical monocytes
+144,pSS-3,DC1,cell_batch.pSS-3-celltypist_label.DC1
+145,pSS-3,DC2,cell_batch.pSS-3-celltypist_label.DC2
+146,pSS-3,Late erythroid,cell_batch.pSS-3-celltypist_label.Late erythroid
+147,pSS-3,MAIT cells,cell_batch.pSS-3-celltypist_label.MAIT cells
+148,pSS-3,Megakaryocyte precursor,cell_batch.pSS-3-celltypist_label.Megakaryocyte precursor
+149,pSS-3,Megakaryocytes/platelets,cell_batch.pSS-3-celltypist_label.Megakaryocytes/platelets
+150,pSS-3,Memory B cells,cell_batch.pSS-3-celltypist_label.Memory B cells
+151,pSS-3,Naive B cells,cell_batch.pSS-3-celltypist_label.Naive B cells
+152,pSS-3,Non-classical monocytes,cell_batch.pSS-3-celltypist_label.Non-classical monocytes
+153,pSS-3,Plasma cells,cell_batch.pSS-3-celltypist_label.Plasma cells
+154,pSS-3,Regulatory T cells,cell_batch.pSS-3-celltypist_label.Regulatory T cells
+155,pSS-3,Tcm/Naive cytotoxic T cells,cell_batch.pSS-3-celltypist_label.Tcm/Naive cytotoxic T cells
+156,pSS-3,Tcm/Naive helper T cells,cell_batch.pSS-3-celltypist_label.Tcm/Naive helper T cells
+157,pSS-3,Tem/Effector helper T cells,cell_batch.pSS-3-celltypist_label.Tem/Effector helper T cells
+158,pSS-3,Tem/Temra cytotoxic T cells,cell_batch.pSS-3-celltypist_label.Tem/Temra cytotoxic T cells
+159,pSS-3,Tem/Trm cytotoxic T cells,cell_batch.pSS-3-celltypist_label.Tem/Trm cytotoxic T cells
+160,pSS-3,pDC,cell_batch.pSS-3-celltypist_label.pDC
+161,pSS-4,CD16+ NK cells,cell_batch.pSS-4-celltypist_label.CD16+ NK cells
+162,pSS-4,Classical monocytes,cell_batch.pSS-4-celltypist_label.Classical monocytes
+163,pSS-4,DC1,cell_batch.pSS-4-celltypist_label.DC1
+164,pSS-4,DC2,cell_batch.pSS-4-celltypist_label.DC2
+165,pSS-4,Late erythroid,cell_batch.pSS-4-celltypist_label.Late erythroid
+166,pSS-4,MAIT cells,cell_batch.pSS-4-celltypist_label.MAIT cells
+167,pSS-4,Mast cells,cell_batch.pSS-4-celltypist_label.Mast cells
+168,pSS-4,Megakaryocyte precursor,cell_batch.pSS-4-celltypist_label.Megakaryocyte precursor
+169,pSS-4,Megakaryocytes/platelets,cell_batch.pSS-4-celltypist_label.Megakaryocytes/platelets
+170,pSS-4,Memory B cells,cell_batch.pSS-4-celltypist_label.Memory B cells
+171,pSS-4,NK cells,cell_batch.pSS-4-celltypist_label.NK cells
+172,pSS-4,Naive B cells,cell_batch.pSS-4-celltypist_label.Naive B cells
+173,pSS-4,Non-classical monocytes,cell_batch.pSS-4-celltypist_label.Non-classical monocytes
+174,pSS-4,Plasma cells,cell_batch.pSS-4-celltypist_label.Plasma cells
+175,pSS-4,Regulatory T cells,cell_batch.pSS-4-celltypist_label.Regulatory T cells
+176,pSS-4,Tcm/Naive cytotoxic T cells,cell_batch.pSS-4-celltypist_label.Tcm/Naive cytotoxic T cells
+177,pSS-4,Tcm/Naive helper T cells,cell_batch.pSS-4-celltypist_label.Tcm/Naive helper T cells
+178,pSS-4,Tem/Effector helper T cells,cell_batch.pSS-4-celltypist_label.Tem/Effector helper T cells
+179,pSS-4,Tem/Temra cytotoxic T cells,cell_batch.pSS-4-celltypist_label.Tem/Temra cytotoxic T cells
+180,pSS-4,Tem/Trm cytotoxic T cells,cell_batch.pSS-4-celltypist_label.Tem/Trm cytotoxic T cells
+181,pSS-4,pDC,cell_batch.pSS-4-celltypist_label.pDC
+182,pSS-5,CD16+ NK cells,cell_batch.pSS-5-celltypist_label.CD16+ NK cells
+183,pSS-5,Classical monocytes,cell_batch.pSS-5-celltypist_label.Classical monocytes
+184,pSS-5,DC1,cell_batch.pSS-5-celltypist_label.DC1
+185,pSS-5,DC2,cell_batch.pSS-5-celltypist_label.DC2
+186,pSS-5,Late erythroid,cell_batch.pSS-5-celltypist_label.Late erythroid
+187,pSS-5,MAIT cells,cell_batch.pSS-5-celltypist_label.MAIT cells
+188,pSS-5,Mast cells,cell_batch.pSS-5-celltypist_label.Mast cells
+189,pSS-5,Megakaryocyte precursor,cell_batch.pSS-5-celltypist_label.Megakaryocyte precursor
+190,pSS-5,Megakaryocytes/platelets,cell_batch.pSS-5-celltypist_label.Megakaryocytes/platelets
+191,pSS-5,Memory B cells,cell_batch.pSS-5-celltypist_label.Memory B cells
+192,pSS-5,Naive B cells,cell_batch.pSS-5-celltypist_label.Naive B cells
+193,pSS-5,Non-classical monocytes,cell_batch.pSS-5-celltypist_label.Non-classical monocytes
+194,pSS-5,Plasma cells,cell_batch.pSS-5-celltypist_label.Plasma cells
+195,pSS-5,Regulatory T cells,cell_batch.pSS-5-celltypist_label.Regulatory T cells
+196,pSS-5,Tcm/Naive cytotoxic T cells,cell_batch.pSS-5-celltypist_label.Tcm/Naive cytotoxic T cells
+197,pSS-5,Tcm/Naive helper T cells,cell_batch.pSS-5-celltypist_label.Tcm/Naive helper T cells
+198,pSS-5,Tem/Effector helper T cells,cell_batch.pSS-5-celltypist_label.Tem/Effector helper T cells
+199,pSS-5,Tem/Temra cytotoxic T cells,cell_batch.pSS-5-celltypist_label.Tem/Temra cytotoxic T cells
+200,pSS-5,Tem/Trm cytotoxic T cells,cell_batch.pSS-5-celltypist_label.Tem/Trm cytotoxic T cells
+201,pSS-5,pDC,cell_batch.pSS-5-celltypist_label.pDC
