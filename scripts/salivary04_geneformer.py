@@ -232,21 +232,27 @@ print(datestamp)
 
 # %% TRAINING ARGUMENTS
 training_args = {
-    "num_train_epochs": 8,  # fewer epochs, LR floor prevents waste
-    "per_device_train_batch_size": 12,
-    "gradient_accumulation_steps": 2,
-    "learning_rate": 3e-6,  # keep hyperopt-discovered value
-    "lr_scheduler_type": "cosine_with_min_lr",
-    "lr_scheduler_kwargs": {"min_lr_rate": 0.1},  # floor at 10% = 3e-7
-    "warmup_steps": 1800,
-    "weight_decay": 0.177,  # keep hyperopt-discovered value
+    "num_train_epochs": 3,  # Faster iteration
+    "per_device_train_batch_size": 8,
+    "gradient_accumulation_steps": 4,
+    "learning_rate": 2e-5,  # Slightly higher for faster convergence in small sets
+    "lr_scheduler_type": "linear",
+    "warmup_steps": 500,
+    "weight_decay": 0.01,
+    "label_smoothing_factor": 0.1,
     "eval_strategy": "epoch",
-    "per_device_eval_batch_size": 12,
     "load_best_model_at_end": True,
-    "metric_for_best_model": "eval_macro_f1",
-    "greater_is_better": True,
-    "seed": 73,
 }
+
+# --- Stratified Subset for Speed ---
+# Use this to quickly test if your model can learn BEFORE doing the 5hr run
+subset_indices = []
+for disease in adata.obs["disease"].unique():
+    # Take 2000 cells per disease, stratified by donor where possible
+    subset = adata.obs[adata.obs["disease"] == disease].sample(n=2000, random_state=42)
+    subset_indices.extend(subset.index)
+
+adata_subset = adata[subset_indices].copy()
 
 cc = Classifier(
     classifier="cell",
@@ -273,7 +279,7 @@ cc = Classifier(
     },
     training_args=training_args,
     max_ncells=None,  # use all cells
-    freeze_layers=0,
+    freeze_layers=2,
     num_crossval_splits=1,
     forward_batch_size=16,
     nproc=4,  # ← back to 4
@@ -353,7 +359,6 @@ cc.prepare_data(
     output_prefix=output_prefix,
     split_id_dict=train_test_id_split_dict,
 )
-
 # %%
 
 all_metrics = cc.validate(
@@ -395,69 +400,6 @@ cc.plot_roc(
 )
 all_metrics
 
-# %% DIAGNOSTIC
-import pickle
-from collections import Counter
-
-import pandas as pd
-from datasets import load_from_disk
-
-print("========== GENEFORMER DIAGNOSTIC REPORT ==========\n")
-
-# 1. Check Original AnnData Label Formatting
-print("--- 1. Original AnnData Disease Categories ---")
-try:
-    print(adata.obs["disease"].value_counts(dropna=False).to_string())
-except NameError:
-    print("adata not found in memory.")
-print("\n")
-
-# 2. Check the Saved Label Dictionary (The usual suspect for AUC < 0.5)
-print("--- 2. Saved id_class_dict ---")
-dict_path = f"{output_dir}/{output_prefix}_id_class_dict.pkl"
-try:
-    with open(dict_path, "rb") as f:
-        id_class_dict = pickle.load(f)
-    print(id_class_dict)
-except FileNotFoundError:
-    print(f"File not found: {dict_path}")
-print("\n")
-
-# 3. Check the Processed Hugging Face Datasets
-print("--- 3. Tokenized Dataset Class Distribution ---")
-try:
-    # Geneformer saves the splits with these suffixes
-    train_ds = load_from_disk(f"{output_dir}/{output_prefix}_labeled_train.dataset")
-    test_ds = load_from_disk(f"{output_dir}/{output_prefix}_labeled_test.dataset")
-
-    if "label" in train_ds.features:
-        train_counts = Counter(train_ds["label"])
-        test_counts = Counter(test_ds["label"])
-        print(f"Train Dataset labels: {dict(train_counts)}")
-        print(f"Test Dataset labels:  {dict(test_counts)}")
-    else:
-        print("Column 'label' not found in Hugging Face datasets.")
-except Exception as e:
-    print(f"Could not load datasets: {e}")
-print("\n")
-
-# 4. Check the Confusion Matrix & Metrics
-print("--- 4. Evaluation Metrics ---")
-try:
-    # Assuming cc.validate() output was saved to a variable named 'all_metrics'
-    if "conf_matrix" in all_metrics:
-        print("Confusion Matrix:")
-        print(all_metrics["conf_matrix"])
-    else:
-        print("'conf_matrix' not found in all_metrics.")
-
-    print(f"\nMacro F1 Score: {all_metrics.get('eval_macro_f1', 'N/A')}")
-    print(f"Overall Accuracy: {all_metrics.get('eval_accuracy', 'N/A')}")
-except NameError:
-    print(
-        "'all_metrics' variable not found in memory. (Did you assign the output of cc.validate()?)"
-    )
-print("\n==================================================")
 
 # %% EMBEDDING EXTRACTION
 
