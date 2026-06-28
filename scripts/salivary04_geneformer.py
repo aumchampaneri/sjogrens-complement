@@ -23,17 +23,26 @@ INPUT_DIR.mkdir(parents=True, exist_ok=True)
 TOKENIZED_DIR = DATA_DIR / "geneformer" / "tokenized"
 TOKENIZED_DIR.mkdir(parents=True, exist_ok=True)
 
+FINETUNE_DIR = DATA_DIR / "geneformer" / "finetune"
+FINETUNE_DIR.mkdir(parents=True, exist_ok=True)
+
+EMB_DIR = DATA_DIR / "geneformer" / "emb"
+EMB_DIR.mkdir(parents=True, exist_ok=True)
+
 RESOURCE_DIR = PROJECT_DIR / "resources"
 
 GENEFORMER = PROJECT_DIR / "geneformer"
 GENEFORMER.mkdir(parents=True, exist_ok=True)
 
 # %% IMPORTS
+import datetime
 import subprocess
 
+import numpy as np
 import scanpy as sc
+from sklearn.model_selection import train_test_split
 
-import geneformer
+from geneformer import Classifier, EmbExtractor, TranscriptomeTokenizer
 
 # %% DOWNLOAD GENEFORMER
 if not os.listdir(GENEFORMER):
@@ -198,8 +207,6 @@ custom_attrs = {
 }
 
 # %% TOKENIZATION
-from geneformer import TranscriptomeTokenizer
-
 tk = TranscriptomeTokenizer(
     custom_attr_name_dict=custom_attrs,
     chunk_size=512,  # adjust based on available memory
@@ -213,3 +220,305 @@ tk.tokenize_data(
     file_format="h5ad",
 )
 # %% FINE-TUNING
+current_date = datetime.datetime.now()
+datestamp = f"{str(current_date.year)[-2:]}{current_date.month:02d}{current_date.day:02d}{current_date.hour:02d}{current_date.minute:02d}{current_date.second:02d}"
+datestamp_min = (
+    f"{str(current_date.year)[-2:]}{current_date.month:02d}{current_date.day:02d}"
+)
+output_prefix = "ss_dz_classifier"
+output_dir = FINETUNE_DIR / f"{datestamp}"
+os.makedirs(output_dir, exist_ok=True)
+print(datestamp)
+
+# %% TRAINING ARGUMENTS
+training_args = {
+    "num_train_epochs": 8,  # fewer epochs, LR floor prevents waste
+    "per_device_train_batch_size": 12,
+    "gradient_accumulation_steps": 2,
+    "learning_rate": 3e-6,  # keep hyperopt-discovered value
+    "lr_scheduler_type": "cosine_with_min_lr",
+    "lr_scheduler_kwargs": {"min_lr_rate": 0.1},  # floor at 10% = 3e-7
+    "warmup_steps": 1800,
+    "weight_decay": 0.177,  # keep hyperopt-discovered value
+    "eval_strategy": "epoch",
+    "per_device_eval_batch_size": 12,
+    "load_best_model_at_end": True,
+    "metric_for_best_model": "eval_macro_f1",
+    "greater_is_better": True,
+    "seed": 73,
+}
+
+cc = Classifier(
+    classifier="cell",
+    cell_state_dict={"state_key": "disease", "states": "all"},
+    filter_data={
+        "cell-type": [
+            "Macrophage",
+            "dendritic cell",
+            "B cell",
+            "Plasma cell",
+            "CD4-positive, alpha-beta T cell",
+            "CD8-positive, alpha-beta cytotoxic T cell",
+            "CD8-positive, alpha-beta regulatory T cell",  # autoimmune relevance
+            "effector CD8-positive, alpha-beta T cell",  # tissue inflammation
+            "mature NK T cell",
+            "fibroblast",
+            "endothelial cell",
+            "smooth muscle cell",
+            "acinar cell of salivary gland",  # primary target tissue in Sjögren's
+            "duct epithelial cell",  # also affected in Sjögren's
+            "myoepithelial cell",  # salivary gland structural cell
+            "ionocyte",
+        ]
+    },
+    training_args=training_args,
+    max_ncells=None,  # use all cells
+    freeze_layers=0,
+    num_crossval_splits=1,
+    forward_batch_size=16,
+    nproc=4,  # ← back to 4
+    ngpu=0,
+    model_version="V1",
+)
+
+# %% SPLIT DATASET INTO TRAINING-VALIDATION-TEST SETS
+# 1. Isolate cells that passed your initial filters
+passing_cells_idx = adata.obs[adata.obs["filter_pass"] == 1].index
+adata_filtered = adata[passing_cells_idx].copy()
+
+# 2. Get cell counts per donor to identify mega-donors
+donor_counts = (
+    adata_filtered.obs.groupby(["disease", "donor_id"], observed=True)
+    .size()
+    .reset_index(name="cell_count")
+)
+
+# 3. Stratify and split the DONORS (60/20/20)
+train_eval_donors, test_donors = train_test_split(
+    donor_counts, test_size=0.20, stratify=donor_counts["disease"], random_state=42
+)
+
+train_donors, eval_donors = train_test_split(
+    train_eval_donors,
+    test_size=0.25,
+    stratify=train_eval_donors["disease"],
+    random_state=42,
+)
+
+train_ids = train_donors["donor_id"].tolist()
+eval_ids = eval_donors["donor_id"].tolist()
+test_ids = test_donors["donor_id"].tolist()
+
+# 4. CAP MEGA-DONORS IN TRAINING TO PREVENT OVERFITTING
+# Max 2000 cells per donor in the training set
+MAX_CELLS_PER_DONOR = 2000
+final_training_indices = []
+
+for donor in train_ids:
+    donor_indices = adata_filtered.obs[
+        adata_filtered.obs["donor_id"] == donor
+    ].index.tolist()
+    if len(donor_indices) > MAX_CELLS_PER_DONOR:
+        np.random.seed(42)
+        donor_indices = np.random.choice(
+            donor_indices, MAX_CELLS_PER_DONOR, replace=False
+        ).tolist()
+    final_training_indices.extend(donor_indices)
+
+# Keep all validation and test cells intact for honest evaluation
+val_test_indices = adata_filtered.obs[
+    adata_filtered.obs["donor_id"].isin(eval_ids + test_ids)
+].index.tolist()
+final_keep_indices = final_training_indices + val_test_indices
+
+# Update your anndata object before tokenization/preparation
+adata_final = adata_filtered[final_keep_indices].copy()
+
+# 5. Build your Geneformer split dictionaries
+train_test_id_split_dict = {
+    "attr_key": "individual",
+    "train": train_ids + eval_ids,
+    "test": test_ids,
+}
+
+train_valid_id_split_dict = {
+    "attr_key": "individual",
+    "train": train_ids,
+    "valid": eval_ids,
+}
+
+cc.prepare_data(
+    input_data_file=str(TOKENIZED_DIR / "ss_tokenized.dataset"),
+    output_directory=str(output_dir),
+    output_prefix=output_prefix,
+    split_id_dict=train_test_id_split_dict,
+)
+
+# %%
+
+all_metrics = cc.validate(
+    model_directory=GENEFORMER
+    / "Geneformer-V1-10M",  # set to V1 model to fit barely onto local resources -- V1 is faster
+    prepared_input_data_file=f"{output_dir}/{output_prefix}_labeled_train.dataset",
+    id_class_dict_file=f"{output_dir}/{output_prefix}_id_class_dict.pkl",
+    output_directory=os.path.abspath(output_dir),
+    output_prefix=output_prefix,
+    # split_id_dict=train_valid_id_split_dict,
+    attr_to_split="individual",
+    attr_to_balance=["disease", "age", "sex"],
+    # attr_to_balance=["disease"],
+    n_hyperopt_trials=0,  # Number of trials to run for hyperparameter optimization. Set it to 0 for direct training without hyperparameter optimization.
+)
+
+# %%
+all_metrics = cc.evaluate_saved_model(
+    model_directory=f"{output_dir}/{datestamp_min}_geneformer_cellClassifier_{output_prefix}/ksplit1/",
+    # model_directory=best_checkpoint,
+    id_class_dict_file=f"{output_dir}/{output_prefix}_id_class_dict.pkl",
+    test_data_file=f"{output_dir}/{output_prefix}_labeled_test.dataset",
+    output_directory=output_dir,
+    output_prefix=output_prefix,
+)
+
+# %%
+cc.plot_conf_mat(
+    conf_mat_dict={"Geneformer": all_metrics["conf_matrix"]},
+    output_directory=output_dir,
+    output_prefix=output_prefix,
+)
+cc.plot_roc(
+    roc_metric_dict={"Geneformer": all_metrics["all_roc_metrics"]},
+    model_style_dict={"Geneformer": {"color": "red", "linestyle": "-"}},
+    title="Dosage-sensitive vs -insensitive factors",
+    output_directory=output_dir,
+    output_prefix=output_prefix,
+)
+all_metrics
+
+# %% DIAGNOSTIC
+import pickle
+from collections import Counter
+
+import pandas as pd
+from datasets import load_from_disk
+
+print("========== GENEFORMER DIAGNOSTIC REPORT ==========\n")
+
+# 1. Check Original AnnData Label Formatting
+print("--- 1. Original AnnData Disease Categories ---")
+try:
+    print(adata.obs["disease"].value_counts(dropna=False).to_string())
+except NameError:
+    print("adata not found in memory.")
+print("\n")
+
+# 2. Check the Saved Label Dictionary (The usual suspect for AUC < 0.5)
+print("--- 2. Saved id_class_dict ---")
+dict_path = f"{output_dir}/{output_prefix}_id_class_dict.pkl"
+try:
+    with open(dict_path, "rb") as f:
+        id_class_dict = pickle.load(f)
+    print(id_class_dict)
+except FileNotFoundError:
+    print(f"File not found: {dict_path}")
+print("\n")
+
+# 3. Check the Processed Hugging Face Datasets
+print("--- 3. Tokenized Dataset Class Distribution ---")
+try:
+    # Geneformer saves the splits with these suffixes
+    train_ds = load_from_disk(f"{output_dir}/{output_prefix}_labeled_train.dataset")
+    test_ds = load_from_disk(f"{output_dir}/{output_prefix}_labeled_test.dataset")
+
+    if "label" in train_ds.features:
+        train_counts = Counter(train_ds["label"])
+        test_counts = Counter(test_ds["label"])
+        print(f"Train Dataset labels: {dict(train_counts)}")
+        print(f"Test Dataset labels:  {dict(test_counts)}")
+    else:
+        print("Column 'label' not found in Hugging Face datasets.")
+except Exception as e:
+    print(f"Could not load datasets: {e}")
+print("\n")
+
+# 4. Check the Confusion Matrix & Metrics
+print("--- 4. Evaluation Metrics ---")
+try:
+    # Assuming cc.validate() output was saved to a variable named 'all_metrics'
+    if "conf_matrix" in all_metrics:
+        print("Confusion Matrix:")
+        print(all_metrics["conf_matrix"])
+    else:
+        print("'conf_matrix' not found in all_metrics.")
+
+    print(f"\nMacro F1 Score: {all_metrics.get('eval_macro_f1', 'N/A')}")
+    print(f"Overall Accuracy: {all_metrics.get('eval_accuracy', 'N/A')}")
+except NameError:
+    print(
+        "'all_metrics' variable not found in memory. (Did you assign the output of cc.validate()?)"
+    )
+print("\n==================================================")
+
+# %% EMBEDDING EXTRACTION
+
+embex = EmbExtractor(
+    model_type="CellClassifier",  # set to GeneClassifier or Pretrained for those model types
+    num_classes=2,  # number of classes of fine-tuned model
+    filter_data={
+        "cell-type": [
+            "Macrophage",
+            "dendritic cell",
+            "B cell",
+            "Plasma cell",
+            "CD4-positive, alpha-beta T cell",
+            "CD8-positive, alpha-beta cytotoxic T cell",
+            "CD8-positive, alpha-beta regulatory T cell",
+            "effector CD8-positive, alpha-beta T cell",
+            "mature NK T cell",
+            "fibroblast",
+            "endothelial cell",
+            "smooth muscle cell",
+            "acinar cell of salivary gland",
+            "duct epithelial cell",
+            "myoepithelial cell",
+            "ionocyte",
+        ]
+    },
+    max_ncells=94116,  # use full dataset
+    emb_layer=0,  # extracts embeddings from last layer
+    emb_label=["disease", "individual"],
+    labels_to_plot=["disease", "individual"],
+    forward_batch_size=128,
+    nproc=8,
+    model_version="V1",  # default is V2, here set to V1 model to fit into Colab 40G GPU resources
+)
+
+model_path = (
+    f"{output_dir}/{datestamp_min}_geneformer_cellClassifier_{output_prefix}/ksplit1/"
+)
+
+embs = embex.extract_embs(
+    model_path,
+    TOKENIZED_DIR / "ss_tokenized.dataset",
+    EMB_DIR,
+    "ss_finetuned_embs",
+)
+
+# %%
+embex.plot_embs(
+    embs=embs,
+    plot_style="umap",
+    output_directory=EMB_DIR,
+    output_prefix="emb_umap",
+    max_ncells_to_plot=10000,
+)
+
+embex.plot_embs(
+    embs=embs,
+    plot_style="heatmap",
+    output_directory=EMB_DIR,
+    output_prefix="emb_heatmap",
+    max_ncells_to_plot=10000,
+)
+
+# %%
