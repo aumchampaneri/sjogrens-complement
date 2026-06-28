@@ -11,6 +11,8 @@ version = "0.1.0"
 python = "3.10.18.*"
 ipykernel = ">=7.3.0,<8"
 scanpy = ">=1.11.5,<2"
+pytorch = "*"        # Changed name to 'pytorch' and let Conda choose the version
+scvi-tools = "*"     # Let Conda pick the best 1.x version for your M-chip
 
 [pypi-dependencies]
 cellxgene-census = ">=1.18.0, <2"
@@ -22,4 +24,3 @@ pydeseq2 = ">=0.5.2, <0.6"
 cell2cell = ">=0.8.4, <0.9"
 decoupler = ">=2.1.4, <3"
 liana = ">=1.7.3, <2"
-torch = ">=2.10.0, <3"
