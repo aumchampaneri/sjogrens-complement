@@ -9,10 +9,14 @@ version = "0.1.0"
 
 [dependencies]
 python = "3.10.18.*"
+git-lfs = "*"
 ipykernel = ">=7.3.0,<8"
 scanpy = ">=1.11.5,<2"
-pytorch = "*"        # Changed name to 'pytorch' and let Conda choose the version
-scvi-tools = "*"     # Let Conda pick the best 1.x version for your M-chip
+pytorch = "*"
+scvi-tools = "*"
+fsspec = "==2025.12.0"
+s3fs = "==2025.12.0"
+gcsfs = "==2025.12.0"
 
 [pypi-dependencies]
 cellxgene-census = ">=1.18.0, <2"
@@ -24,3 +28,5 @@ pydeseq2 = ">=0.5.2, <0.6"
 cell2cell = ">=0.8.4, <0.9"
 decoupler = ">=2.1.4, <3"
 liana = ">=1.7.3, <2"
+datasets = ">=4.6.0, <5.0.0" # <-- This allows fsspec up to 2026.2.0, satisfying 2025.12.0 while keeping xopen!
+geneformer = { path = "./geneformer", editable = true }
